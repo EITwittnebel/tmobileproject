@@ -20,6 +20,7 @@
 		3AD3E8EE24797525006B17A3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3AD3E8EC24797525006B17A3 /* Main.storyboard */; };
 		3AD3E8F02479752A006B17A3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3AD3E8EF2479752A006B17A3 /* Assets.xcassets */; };
 		3AD3E8F32479752A006B17A3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3AD3E8F12479752A006B17A3 /* LaunchScreen.storyboard */; };
+		6E285898247D68E500DFA64B /* AFManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E285897247D68E500DFA64B /* AFManager.swift */; };
 		8255DC2ECCBB098B03C3D936 /* Pods_TmobileAssign.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E56FFF4C392482948A9AC991 /* Pods_TmobileAssign.framework */; };
 /* End PBXBuildFile section */
 
@@ -41,6 +42,7 @@
 		3AD3E8F22479752A006B17A3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3AD3E8F42479752A006B17A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C5B94240FB19F0CB48424DE /* Pods-TmobileAssign.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TmobileAssign.release.xcconfig"; path = "Target Support Files/Pods-TmobileAssign/Pods-TmobileAssign.release.xcconfig"; sourceTree = "<group>"; };
+		6E285897247D68E500DFA64B /* AFManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFManager.swift; sourceTree = "<group>"; };
 		E56FFF4C392482948A9AC991 /* Pods_TmobileAssign.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TmobileAssign.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -99,10 +101,11 @@
 		3AD3E8E524797525006B17A3 /* TmobileAssign */ = {
 			isa = PBXGroup;
 			children = (
-				3AD3E8E624797525006B17A3 /* AppDelegate.swift */,
-				3AD3E8E824797525006B17A3 /* SceneDelegate.swift */,
 				3A2D7601247B24010071B8F2 /* Model */,
 				3A2D75FF247B23ED0071B8F2 /* ViewControllers */,
+				6E285896247D68B400DFA64B /* Service */,
+				3AD3E8E624797525006B17A3 /* AppDelegate.swift */,
+				3AD3E8E824797525006B17A3 /* SceneDelegate.swift */,
 				3AD3E8EC24797525006B17A3 /* Main.storyboard */,
 				3AD3E8EF2479752A006B17A3 /* Assets.xcassets */,
 				3AD3E8F12479752A006B17A3 /* LaunchScreen.storyboard */,
@@ -117,6 +120,14 @@
 				E56FFF4C392482948A9AC991 /* Pods_TmobileAssign.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6E285896247D68B400DFA64B /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				6E285897247D68E500DFA64B /* AFManager.swift */,
+			);
+			path = Service;
 			sourceTree = "<group>";
 		};
 		F0432351F7E1060D28775D0F /* Pods */ = {
@@ -247,6 +258,7 @@
 				3A642DEB247B0531000335B1 /* DetailViewController.swift in Sources */,
 				3A707E5A2479E68B00AB6A84 /* MoreInfo.swift in Sources */,
 				3ACECC19247CB0FF006EF69F /* Credentials.swift in Sources */,
+				6E285898247D68E500DFA64B /* AFManager.swift in Sources */,
 				3AD3E8E724797525006B17A3 /* AppDelegate.swift in Sources */,
 				3A707E562479A47400AB6A84 /* Repo.swift in Sources */,
 				3A707E582479E68300AB6A84 /* BasicInfo.swift in Sources */,
@@ -328,7 +340,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -382,7 +394,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
