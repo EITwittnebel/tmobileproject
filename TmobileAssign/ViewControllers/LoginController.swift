@@ -13,7 +13,6 @@ import Alamofire
 
 class LoginController: UIViewController {
   
-  var credentials: Credentials?
   @IBOutlet weak var userField: UITextField!
   @IBOutlet weak var passwordField: UITextField!
   @IBAction func loginButton(_ sender: Any) {
@@ -25,28 +24,25 @@ class LoginController: UIViewController {
   }
   
   func validateCredentials() {
-    if (userField.text! == "" || passwordField.text! == "") {
-      let alert = UIAlertController(title: "Invalid Credentials", message: "Please try again.", preferredStyle: .alert)
-      alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-      self.present(alert, animated: true)
-      return
-    }
-    
-    let urlString: String = "https://api.github.com/"
-    let headers: HTTPHeaders = [.authorization(username: userField.text!, password: passwordField.text!)]
-    
-    AF.request(urlString, headers: headers).responseJSON { response in
-      let json: JSON = JSON(response.data as Any)
-      if (json["message"].stringValue == "Bad credentials") {
-        let alert = UIAlertController(title: "Invalid Credentials", message: "Please try again.", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-        self.present(alert, animated: true)
-      } else {
-        self.credentials?.username = self.userField!.text!
-        self.credentials?.password = self.passwordField!.text!
-        self.dismiss(animated: true, completion: nil)
+    AFManager.shared.login(userName: userField.text ?? "", password: passwordField.text ?? "") { result in
+      switch result {
+      case .failure(let error):
+        print(error)
+        self.presentAlertController(title: "Invalid Credentials", message: "Please try again.", error: error)
+      case .success(_):
+        self.presentAlertController(title: "Login Successful", message: "Logged in successfully.", error: nil)
       }
     }
+  }
+  
+  private func presentAlertController(title: String, message: String, error: GithubErrors?) {
+    let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
+      if error == nil {
+        self.dismiss(animated: true, completion: nil)
+      }
+    }))
+    self.present(alert, animated: true)
   }
   
 }
