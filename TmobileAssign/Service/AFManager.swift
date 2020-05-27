@@ -149,32 +149,3 @@ final class AFManager {
   }
   
 }
-
-//class someVM {
-//
-//    var credentials: Credentials {
-//        didSet {
-//            self.update?()
-//        }
-//    }
-//
-//    var update: (() -> ())?
-//
-//    init(creds: Credentials) {
-//        self.credentials = creds
-//
-//    }
-//
-//    func login () {
-//        AFManager.shared.login(userName: "", password: "") { result in
-//            switch result {
-//            case .success(let creds):
-//                self.credentials = creds ?? <#default value#>
-//            case .failure(let error):
-//                print("")
-//            }
-//        }
-//    }
-//
-//}
-
