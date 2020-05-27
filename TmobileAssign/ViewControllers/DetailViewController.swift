@@ -6,13 +6,12 @@
 //  Copyright © 2020 John Wittnebel. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 class DetailViewController: UIViewController {
   
   var info: UserData?
-  var reposToDisplay: [Repo]?
+  var reposToDisplay: [Repo] = []
   
   @IBOutlet weak var emailLabel: UILabel!
   @IBOutlet weak var locationLabel: UILabel!
@@ -56,44 +55,31 @@ class DetailViewController: UIViewController {
           self.repoTable.reloadData()
         }
       case .failure(let error):
-        if (error == .other) {
-          self.presentErrorAlert(title: "Unknown Error", message: "An unknown error has occurred.")
-        } else if (error == .noConnection) {
-          self.presentErrorAlert(title: "No Connection", message: "Could not establish a connection, please check your internet connection.")
-        } else {
-          self.presentErrorAlert(title: "Rate Limited", message: "You have been rate limited, please login to substantially increase rate limit. You will only be able to see usernames and avatars for the next hour otherwise.")
-        }
+        self.presentErrorAlert(error: error)
       }
     }
-  }
-  
-  private func presentErrorAlert(title: String, message: String) {
-    let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-    self.present(alert, animated: true)
   }
   
 }
 
 extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return reposToDisplay?.count ?? 0
+    return reposToDisplay.count
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = repoTable.dequeueReusableCell(withIdentifier: "repoCell") as? RepoTableCell
     guard let cellVal = cell else { return UITableViewCell() }
-    guard (reposToDisplay?.count ?? 0) > indexPath.row else { return cellVal }
-    cellVal.repoNameLabel.text = reposToDisplay?[indexPath.row].name
-    cellVal.numForksLabel.text = "Forks: " + (reposToDisplay?[indexPath.row].numForks ?? "???")
-    cellVal.numStarsLabel.text = "Stars: " + (reposToDisplay?[indexPath.row].numStars ?? "???")
+    cellVal.repoNameLabel.text = reposToDisplay[indexPath.row].name
+    cellVal.numForksLabel.text = "Forks: " + (reposToDisplay[indexPath.row].numForks ?? "???")
+    cellVal.numStarsLabel.text = "Stars: " + (reposToDisplay[indexPath.row].numStars ?? "???")
     
     return cellVal
   }
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     repoTable.deselectRow(at: indexPath, animated: true)
-    if let url = URL(string: "https://www.github.com/" + (info?.basicData?.name ?? "error") + "/" + (reposToDisplay?[indexPath.row].name ?? "")) {
+    if let url = URL(string: "https://www.github.com/" + (info?.basicData?.name ?? "error") + "/" + (reposToDisplay[indexPath.row].name ?? "")) {
       UIApplication.shared.open(url)
     }
   }
@@ -102,16 +88,17 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension DetailViewController: UISearchBarDelegate {
   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-    if (searchText == "") {
-      reposToDisplay = info?.repos
+    if searchText.isEmpty {
+      reposToDisplay = info?.repos ?? []
     } else {
       reposToDisplay = []
       for repo in (info?.repos ?? []) {
         if ((repo.name.range(of: searchText, options: String.CompareOptions.caseInsensitive, range: nil, locale: nil)) != nil) {
-          reposToDisplay?.append(repo)
+          reposToDisplay.append(repo)
         }
       }
     }
     repoTable.reloadData()
   }
+  
 }

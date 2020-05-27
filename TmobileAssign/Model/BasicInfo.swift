@@ -6,7 +6,6 @@
 //  Copyright © 2020 John Wittnebel. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 struct BasicInfo {

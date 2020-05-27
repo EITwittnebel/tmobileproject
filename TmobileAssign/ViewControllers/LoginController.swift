@@ -6,7 +6,6 @@
 //  Copyright © 2020 John Wittnebel. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 class LoginController: UIViewController {
@@ -22,7 +21,14 @@ class LoginController: UIViewController {
   }
   
   func validateCredentials() {
-    AFManager.shared.login(userName: userField.text ?? "", password: passwordField.text ?? "") { result in
+    guard let username = userField.text,
+      username.isEmpty == false,
+      let password = passwordField.text,
+      password.isEmpty == false else {
+      self.presentAlertController(title: "Empty Credentials", message: "Please try again.")
+      return
+    }
+    AFManager.shared.login(userName: username, password: password) { result in
       switch result {
       case .failure(let error):
         print(error)
@@ -33,7 +39,7 @@ class LoginController: UIViewController {
     }
   }
   
-  private func presentAlertController(title: String, message: String, error: GithubErrors?) {
+  private func presentAlertController(title: String, message: String, error: GithubErrors? = nil) {
     let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
       if error == nil {
