@@ -8,7 +8,7 @@
 
 import Foundation
 
-class UserData {
+struct UserData {
   var basicData: BasicInfo?
   var moreData: MoreInfo?
   var repos: [Repo]

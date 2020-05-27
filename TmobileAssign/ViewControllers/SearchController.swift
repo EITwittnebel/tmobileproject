@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Alamofire
 
 class SearchController: UIViewController {
   
@@ -16,6 +15,7 @@ class SearchController: UIViewController {
   @IBOutlet weak var searchBar: UISearchBar!
   var myInfo: [UserData]
   var newAPIRequest: Int
+  let cache = NSCache<NSString, UIImage>()
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -35,7 +35,11 @@ class SearchController: UIViewController {
     if let dest = segue.destination as? DetailViewController {
       guard let cell = sender as? UITableViewCell else { return }
       let indexPath = gitUsers.indexPath(for: cell)
-      dest.info = myInfo[indexPath?.row ?? 0]
+      if let path = indexPath?.row {
+        dest.info = myInfo[path]
+      } else {
+        dest.info = UserData(basicData: nil, moreData: nil, repos: [])
+      }
     }
   }
 }
@@ -47,27 +51,14 @@ extension SearchController: UITableViewDelegate, UITableViewDataSource {
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCell(withIdentifier: "userCell")
-    guard let cellvalue = cell else {
-      return UITableViewCell()
-    }
-    
-    if (indexPath.row >= myInfo.count) {
+    let cell = tableView.dequeueReusableCell(withIdentifier: "userCell") as? UserSearchCell
+    guard let cellvalue = cell else { return UITableViewCell() }
+    guard (indexPath.row < myInfo.count) else {
       return cellvalue
     }
-    
-    if let label = cellvalue.viewWithTag(1001) as? UILabel {
-      let temptext = myInfo[indexPath.row].moreData?.numRepos ?? "loading..."
-      label.text = "Number of public repos: \(temptext)"
-    }
-    
-    if let label = cellvalue.viewWithTag(1000) as? UILabel {
-      label.text = myInfo[indexPath.row].basicData?.name ?? "loading..."
-    }
-    
-    if let avatar = cellvalue.viewWithTag(999) as? UIImageView {
-      avatar.image = myInfo[indexPath.row].basicData?.avatarImage
-    }
+    cellvalue.nameLabel.text = myInfo[indexPath.row].basicData?.name ?? "loading..."
+    cellvalue.numReposLabel.text = "Number of public repos: \(myInfo[indexPath.row].moreData?.numRepos ?? "loading...")"
+    cellvalue.avatarImage.image = myInfo[indexPath.row].basicData?.avatarImage
     
     return cellvalue
   }
@@ -88,10 +79,13 @@ extension SearchController: UITableViewDelegate, UITableViewDataSource {
           self.gitUsers.reloadData()
         }
       case .failure(let error):
-        print(error)
-        let alert = UIAlertController(title: "Rate Limited", message: "You have been rate limited, please login to substantially increase rate limit. You will only be able to see usernames and avatars for the next hour otherwise.", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: {_ in self.dismiss(animated: true, completion: nil)}))
-        self.present(alert, animated: true)
+        if (error == .other) {
+          self.presentErrorAlert(title: "Unknown Error", message: "An unknown error has occurred.")
+        } else if (error == .noConnection) {
+          self.presentErrorAlert(title: "No Connection", message: "Could not establish a connection, please check your internet connection.")
+        } else {
+          self.presentErrorAlert(title: "Rate Limited", message: "You have been rate limited, please login to substantially increase rate limit. You will only be able to see usernames and avatars for the next hour otherwise.")
+        }
       }
     }
   }
@@ -107,12 +101,18 @@ extension SearchController: UISearchBarDelegate {
       switch result {
       case .success(let image):
         self.myInfo[index].basicData?.avatarImage = image
+        let imageToCache = self.myInfo[index].basicData?.avatarImage
+        self.cache.setObject(imageToCache ?? UIImage(), forKey: self.myInfo[index].basicData?.name as NSString? ?? "")
         
         DispatchQueue.main.async {
           self.gitUsers.reloadData()
         }
       case .failure(let error):
-        print(error)
+        if (error == .noConnection) {
+          self.presentErrorAlert(title: "No Connection", message: "Could not establish a connection, please check your internet connection.")
+        } else if (error == .badData) {
+          self.presentErrorAlert(title: "Bad Image Data", message: "Avatar image was invalid.")
+        }
       }
     }
   }
@@ -131,14 +131,28 @@ extension SearchController: UISearchBarDelegate {
             self.myInfo = basicInfo
             for index in 0..<self.myInfo.count {
               self.getMoreInfo(forItemAt: index)
-              self.downloadImage(forItemAt: index)
+              if let cachedImage = self.cache.object(forKey: self.myInfo[index].basicData?.name as NSString? ?? "" as NSString) {
+                self.myInfo[index].basicData?.avatarImage = cachedImage
+              } else {
+                self.downloadImage(forItemAt: index)
+              }
             }
           case .failure(let error):
-            print(error.localizedDescription)
+            if (error == .other) {
+              self.presentErrorAlert(title: "Unknown Error", message: "An unknown error has occurred.")
+            } else if (error == .noConnection) {
+              self.presentErrorAlert(title: "No Connection", message: "Could not establish a connection, please check your internet connection.")
+            }
           }
         }
       }
     })
+  }
+ 
+  private func presentErrorAlert(title: String, message: String) {
+    let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+    self.present(alert, animated: true)
   }
   
 }

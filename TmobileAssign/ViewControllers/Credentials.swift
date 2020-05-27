@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Credentials {
+struct Credentials {
   var username: String
   var password: String
   

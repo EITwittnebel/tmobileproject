@@ -16,7 +16,7 @@ enum GithubErrors: Error {
   case dataLimitReached
   case badData
   case noConnection
-  case something
+  case other
 }
 
 struct URLStrings {
@@ -30,23 +30,30 @@ final class AFManager {
   
   static var shared = AFManager()
   private var credentials: Credentials?
+  private var basicHeaders: HTTPHeaders
   
-  private init() { }
-  
-  func getCredentials() -> Credentials? {
-    return self.credentials
+  private init() {
+    basicHeaders = [.authorization(username: "", password: "")]
   }
   
   func login(userName: String, password: String, completion: @escaping (_ result: Result<Credentials?, GithubErrors>) -> ()) {
     let headers: HTTPHeaders = [.authorization(username: userName, password: password)]
     
     AF.request(URLStrings.login, headers: headers).responseJSON { response in
+      if let error = response.error {
+        if (error.localizedDescription == "The Internet connection appears to be offline.") {
+          completion(.failure(.noConnection))
+        } else {
+          completion(.failure(.other))
+        }
+      }
       let json: JSON = JSON(response.data as Any)
       
       if (json["message"].stringValue == "Bad credentials") {
         completion(.failure(.badCredentials))
       } else {
         self.credentials = Credentials(username: userName, password: password)
+        self.basicHeaders = [.authorization(username: self.credentials?.username ?? "", password: self.credentials?.password ?? "")]
         completion(.success(nil))
       }
     }
@@ -54,9 +61,15 @@ final class AFManager {
   
   func getUserInfo(name: String, completion: @escaping (_ result: Result<MoreInfo, GithubErrors>) -> ()) {
     let urlString: String = URLStrings.detailBase + name
-    let headers: HTTPHeaders = [.authorization(username: self.credentials?.username ?? "", password: self.credentials?.password ?? "")]
     
-    AF.request(urlString, headers: headers).responseJSON { response in
+    AF.request(urlString, headers: basicHeaders).responseJSON { response in
+      if let error = response.error {
+        if (error.localizedDescription == "The Internet connection appears to be offline.") {
+          completion(.failure(.noConnection))
+        } else {
+          completion(.failure(.other))
+        }
+      }
       let json: JSON = JSON(response.data as Any)
       if (json["message"].stringValue != "") {
         completion(.failure(.dataLimitReached))
@@ -69,12 +82,14 @@ final class AFManager {
   
   func basicInfoPull(searchQuery: String, completion: @escaping (_ result: Result<[UserData], GithubErrors>) -> ()) {
     let urlString: String = URLStrings.basicBase + searchQuery
-    let headers: HTTPHeaders = [.authorization(username: self.credentials?.username ?? "", password: self.credentials?.password ?? "")]
     
-    AF.request(urlString, headers: headers).responseJSON { response in
+    AF.request(urlString, headers: basicHeaders).responseJSON { response in
       if let error = response.error {
-        print(error.errorDescription ?? "")
-        completion(.failure(.something))
+        if (error.localizedDescription == "The Internet connection appears to be offline.") {
+          completion(.failure(.noConnection))
+        } else {
+          completion(.failure(.other))
+        }
       }
       
       let json: JSON = JSON(response.data as Any)
@@ -92,9 +107,15 @@ final class AFManager {
   
   func getImage(imageURL: String, completion: @escaping (_ result: Result<UIImage, GithubErrors>) -> ()) {
     
-    let headers: HTTPHeaders = [.authorization(username: self.credentials?.username ?? "", password: self.credentials?.password ?? "")]
-    
-    AF.request(imageURL, headers: headers).responseJSON { response in
+    AF.request(imageURL, headers: basicHeaders).responseJSON { response in
+      if let error = response.error {
+        if (error.localizedDescription == "The Internet connection appears to be offline.") {
+          completion(.failure(.noConnection))
+        } else {
+          completion(.failure(.other))
+        }
+      }
+      
       guard let imageData = response.data else {
         completion(.failure(.badData))
         return
@@ -109,8 +130,14 @@ final class AFManager {
   
   func getRepos(name: String, completion: @escaping (_ result: Result<[Repo], GithubErrors>) -> ()) {
     let urlString = URLStrings.repoBase + name + "/repos"
-    let headers: HTTPHeaders = [.authorization(username: self.credentials?.username ?? "", password: self.credentials?.password ?? "")]
-    AF.request(urlString, headers: headers).responseJSON { response in
+    AF.request(urlString, headers: basicHeaders).responseJSON { response in
+      if let error = response.error {
+        if (error.localizedDescription == "The Internet connection appears to be offline.") {
+          completion(.failure(.noConnection))
+        } else {
+          completion(.failure(.other))
+        }
+      }
       let json: JSON = JSON(response.data as Any)
       let repoArr = json.arrayValue
       var retArr: [Repo] = []

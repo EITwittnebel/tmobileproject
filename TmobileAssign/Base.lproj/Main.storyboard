@@ -19,7 +19,7 @@
                                 <rect key="frame" x="0.0" y="144" width="414" height="752"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="userCell" id="lho-cC-6eL">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="userCell" id="lho-cC-6eL" customClass="UserSearchCell" customModule="TmobileAssign" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="122.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="lho-cC-6eL" id="jdH-m5-exs">
@@ -65,6 +65,9 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="avatarImage" destination="n6o-WS-PRF" id="h3a-IX-MID"/>
+                                            <outlet property="nameLabel" destination="ysj-3h-hkP" id="qCC-z7-6ky"/>
+                                            <outlet property="numReposLabel" destination="9gn-1H-gDp" id="ylC-F3-igN"/>
                                             <segue destination="jwT-Ny-okA" kind="showDetail" id="NAN-zD-UrS"/>
                                         </connections>
                                     </tableViewCell>
@@ -107,7 +110,6 @@
         <!--Login Controller-->
         <scene sceneID="wMR-1C-WA0">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="MSu-7P-B1E" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <viewController id="svR-ux-tNB" customClass="LoginController" customModule="TmobileAssign" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Buc-qh-3RC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
@@ -189,6 +191,7 @@
                         <outlet property="userField" destination="99h-6O-EwW" id="Oob-Ve-oWh"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MSu-7P-B1E" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="892.75362318840587" y="434.59821428571428"/>
         </scene>
@@ -204,30 +207,31 @@
                                 <rect key="frame" x="0.0" y="396.5" width="414" height="445.5"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="200" id="sOy-RI-Res"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="100" id="1Oo-SD-Uuu"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" priority="500" constant="200" id="sOy-RI-Res"/>
                                 </constraints>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="repoCell" rowHeight="121" id="PDg-zG-4Wn">
-                                        <rect key="frame" x="0.0" y="28" width="414" height="121"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="repoCell" rowHeight="112" id="PDg-zG-4Wn" customClass="RepoTableCell" customModule="TmobileAssign" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="414" height="112"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="PDg-zG-4Wn" id="dTb-ba-mc9">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="121"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="112"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" tag="150" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Repo Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UxH-WO-W5S">
-                                                    <rect key="frame" x="20" y="19" width="374" height="28.5"/>
+                                                    <rect key="frame" x="20" y="16" width="374" height="31.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" tag="151" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Num Forks" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8gB-Gs-hJO">
-                                                    <rect key="frame" x="20" y="49.5" width="374" height="22"/>
+                                                    <rect key="frame" x="20" y="49.5" width="374" height="13"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" tag="152" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stars" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fgk-BI-n4H">
-                                                    <rect key="frame" x="20" y="79.5" width="361" height="20.5"/>
+                                                    <rect key="frame" x="20" y="70.5" width="361" height="20.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="20.5" id="sLk-8V-DNC"/>
                                                     </constraints>
@@ -243,7 +247,7 @@
                                                 <constraint firstAttribute="bottomMargin" secondItem="Fgk-BI-n4H" secondAttribute="bottom" constant="10" id="NfR-Lc-yoK"/>
                                                 <constraint firstItem="Fgk-BI-n4H" firstAttribute="top" secondItem="8gB-Gs-hJO" secondAttribute="bottom" constant="8" id="PYu-Iz-3S1"/>
                                                 <constraint firstItem="UxH-WO-W5S" firstAttribute="leading" secondItem="dTb-ba-mc9" secondAttribute="leadingMargin" id="Z8w-o9-bkx"/>
-                                                <constraint firstItem="UxH-WO-W5S" firstAttribute="top" secondItem="dTb-ba-mc9" secondAttribute="topMargin" constant="8" id="ZIP-p0-OKu"/>
+                                                <constraint firstItem="UxH-WO-W5S" firstAttribute="top" secondItem="dTb-ba-mc9" secondAttribute="topMargin" constant="5" id="ZIP-p0-OKu"/>
                                                 <constraint firstItem="8gB-Gs-hJO" firstAttribute="top" secondItem="UxH-WO-W5S" secondAttribute="bottom" constant="2" id="Zvf-Cx-RnH"/>
                                                 <constraint firstItem="UxH-WO-W5S" firstAttribute="trailing" secondItem="dTb-ba-mc9" secondAttribute="trailingMargin" id="cRT-J1-eke"/>
                                                 <constraint firstItem="UxH-WO-W5S" firstAttribute="trailing" secondItem="8gB-Gs-hJO" secondAttribute="trailing" id="f8g-u6-kEF"/>
@@ -252,6 +256,11 @@
                                                 <constraint firstAttribute="trailingMargin" secondItem="Fgk-BI-n4H" secondAttribute="trailing" constant="13" id="wMq-mq-det"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="numForksLabel" destination="8gB-Gs-hJO" id="Hc0-Kk-EmC"/>
+                                            <outlet property="numStarsLabel" destination="Fgk-BI-n4H" id="GrM-qG-Bl7"/>
+                                            <outlet property="repoNameLabel" destination="UxH-WO-W5S" id="idW-C0-B4b"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
@@ -284,7 +293,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <stackView opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="500" axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="kxb-p0-ICc">
+                            <stackView opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="1000" axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="kxb-p0-ICc">
                                 <rect key="frame" x="159" y="72.5" width="247" height="133"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IRN-vj-oxh">
@@ -353,6 +362,7 @@
                             <constraint firstItem="IyY-HH-RAT" firstAttribute="top" secondItem="669-bf-WPd" secondAttribute="bottom" constant="8" id="ejp-5f-FAH"/>
                             <constraint firstItem="qEn-3N-I0w" firstAttribute="trailing" secondItem="EM7-R2-OhP" secondAttribute="trailing" constant="20" id="hqK-oe-3jJ"/>
                             <constraint firstItem="EM7-R2-OhP" firstAttribute="leading" secondItem="qEn-3N-I0w" secondAttribute="leading" constant="20" id="ozR-UA-ZGh"/>
+                            <constraint firstItem="kxb-p0-ICc" firstAttribute="top" relation="greaterThanOrEqual" secondItem="qEn-3N-I0w" secondAttribute="top" constant="20" id="rXC-Jn-h9L"/>
                             <constraint firstItem="joH-X0-Fqj" firstAttribute="leading" secondItem="qEn-3N-I0w" secondAttribute="leading" id="vZX-Ip-aTy"/>
                             <constraint firstItem="qEn-3N-I0w" firstAttribute="trailing" secondItem="EM7-R2-OhP" secondAttribute="trailing" constant="20" id="wxD-Tc-Ycg"/>
                             <constraint firstItem="Nas-Vp-Ejq" firstAttribute="leading" secondItem="qEn-3N-I0w" secondAttribute="leading" constant="24" id="xRP-rr-64m"/>
@@ -382,7 +392,6 @@
         <!--Navigation Controller-->
         <scene sceneID="Xr2-CA-mHS">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="l8q-Bn-4cj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="y09-L1-uoW" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="h7V-Gq-XDD">
@@ -394,6 +403,7 @@
                         <segue destination="vMO-fV-Krv" kind="relationship" relationship="rootViewController" id="VG1-Xk-z1e"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="l8q-Bn-4cj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-17.39130434782609" y="-224.33035714285714"/>
         </scene>

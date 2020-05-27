@@ -8,8 +8,6 @@
 
 import Foundation
 import UIKit
-import SwiftyJSON
-import Alamofire
 
 class LoginController: UIViewController {
   
